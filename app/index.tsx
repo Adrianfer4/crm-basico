@@ -1,7 +1,7 @@
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { Button, Card } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
 export default function ClientsScreen() {
@@ -11,22 +11,27 @@ export default function ClientsScreen() {
     <View
       style={{
         flex: 1,
-        padding: 16
+        padding: 16,
+        backgroundColor: '#f4f4f4'
       }}
     >
-      <Button mode="contained" onPress={() => router.push('/new')}>
+      {clients.length === 0 ? (
+        <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 18 }}>No hay clientes aún</Text>
+      ) : (
+        <FlatList
+          data={clients}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <Card style={{ marginVertical: 8 }} onPress={() => router.push(`/${item.id}`)}>
+              <Card.Title title={item.name} subtitle={item.email} />
+            </Card>
+          )}
+        />
+      )}
+
+      <Button mode="contained" onPress={() => router.push('/new')} style={{ marginTop: 16 }}>
         Agregar Cliente
       </Button>
-
-      <FlatList
-        data={clients}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <Card style={{ marginVertical: 8 }} onPress={() => router.push(`/${item.id}`)}>
-            <Card.Title title={item.name} subtitle={item.email} />
-          </Card>
-        )}
-      />
     </View>
   );
 }

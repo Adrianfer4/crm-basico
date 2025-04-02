@@ -5,7 +5,13 @@ import { Stack } from "expo-router";
 export default function RootLayout() {
   return (
     <Provider store={store}>
-      <Stack />
+      <Stack 
+      screenOptions={{
+        headerStyle: { backgroundColor: '#6200ee' },
+        headerTintColor: '#fff',
+        headerTitleStyle: { fontWeight: 'bold' },
+      }}
+      />
     </Provider>
   )
 }
