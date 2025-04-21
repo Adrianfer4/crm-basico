@@ -12,13 +12,13 @@ import {
   obtenerVentasPorUsuario,
   crearVenta,
   eliminarVenta,
-  actualizarVenta 
+  actualizarVenta,
 } from "@/firebase/ventas";
 import { obtenerClientes } from "@/firebase/clientes";
-import CrearVentaModal from "@/components/NuevoVentaModal";
-import SwipeableNotification from '@/components/SwipeableNotification';
-import ModalEditarVenta from "@/components/ModalEditarVenta";
-import VentaCard from "@/components/VentaCard";
+import CrearVentaModal from "@/components/ventas/NuevoVentaModal";
+import SwipeableNotification from "@/components/notificaciones/SwipeableNotification";
+import ModalEditarVenta from "@/components/ventas/ModalEditarVenta";
+import VentaCard from "@/components/ventas/VentaCard";
 import { Venta, Cliente } from "@/types/venta";
 import { FAB } from "react-native-paper";
 import Toast from "react-native-toast-message";
@@ -26,7 +26,9 @@ import Toast from "react-native-toast-message";
 export default function VentasScreen() {
   const { user } = useAuth();
   const [ventas, setVentas] = useState<Venta[]>([]);
-  const [ventaSeleccionada, setVentaSeleccionada] = useState<Venta | null>(null);
+  const [ventaSeleccionada, setVentaSeleccionada] = useState<Venta | null>(
+    null
+  );
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [loading, setLoading] = useState(true);
   const [openCrear, setOpenCrear] = useState(false);
@@ -44,7 +46,6 @@ export default function VentasScreen() {
         obtenerClientes(),
       ]);
 
-      
       setVentas(ventasData as Venta[]);
       setClientes(clientesData as Cliente[]);
     } finally {
@@ -75,7 +76,7 @@ export default function VentasScreen() {
     try {
       setLoading(true);
 
-      await crearVenta({ 
+      await crearVenta({
         ...data,
         userId: user.uid,
       } as Venta);
@@ -113,6 +114,8 @@ export default function VentasScreen() {
           onPress: async () => {
             try {
               await eliminarVenta(id);
+              setVentas((prev) => prev.filter((v) => v.id !== id));
+
               Toast.show({ type: "success", text1: "Venta eliminada" });
               await fetchData();
             } catch (error) {
@@ -140,15 +143,17 @@ export default function VentasScreen() {
         data={ventas}
         keyExtractor={(item) => item.id!}
         renderItem={({ item }) => (
-          <SwipeableNotification onDelete={() => item.id && handleEliminarVenta(item.id)}>
-          <VentaCard
-            venta={item}
-            clientesMap={clientesMap}
-            onPress={() => {
-              setVentaSeleccionada(item);
-              setModalEditarVisible(true);
-            }}
-          />
+          <SwipeableNotification
+            onDelete={() => item.id && handleEliminarVenta(item.id)}
+          >
+            <VentaCard
+              venta={item}
+              clientesMap={clientesMap}
+              onPress={() => {
+                setVentaSeleccionada(item);
+                setModalEditarVisible(true);
+              }}
+            />
           </SwipeableNotification>
         )}
         contentContainerStyle={styles.listContent}

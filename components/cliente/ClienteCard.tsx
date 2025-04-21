@@ -3,13 +3,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Cliente } from "@/types/venta";
 
 export type Props = {
-    cliente: Cliente;
-    onPress: () => void;
-  };
+  cliente: Cliente;
+  onPress: () => void;
+};
 
-export default function ClienteCard({
-  cliente, onPress
-}: Props) {
+export default function ClienteCard({ cliente, onPress }: Props) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
       <View style={styles.header}>
@@ -20,13 +18,11 @@ export default function ClienteCard({
         />
         <Text style={styles.nombre}>{cliente.nombre}</Text>
       </View>
-      
+
       <View style={styles.details}>
         <Text style={styles.text}>📧 {cliente.email}</Text>
         <Text style={styles.text}>📱 {cliente.telefono}</Text>
-        {cliente.nota && (
-          <Text style={styles.nota}>🗒️ {cliente.nota}</Text>
-        )}
+        {cliente.nota && <Text style={styles.nota}>🗒️ {cliente.nota}</Text>}
       </View>
     </TouchableOpacity>
   );

@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import ClienteCard from "@/components/ClienteCard";
+import ClienteCard from "@/components/cliente/ClienteCard";
 import { Ionicons } from "@expo/vector-icons";
 import { obtenerClientes, eliminarCliente } from "@/firebase/clientes";
 import { Text } from "react-native-paper";
-import NuevoClienteModal from "@/components/NuevoClienteModal";
-import EditarClienteModal from "@/components/EditarClienteModal";
+import NuevoClienteModal from "@/components/cliente/NuevoClienteModal";
+import EditarClienteModal from "@/components/cliente/EditarClienteModal";
 import { Cliente } from "@/types/venta";
-import SwipeableNotification from "@/components/SwipeableNotification";
+import SwipeableNotification from "@/components/notificaciones/SwipeableNotification";
 import Toast from "react-native-toast-message";
 
 export default function IndexClientesScreen() {
@@ -48,34 +48,30 @@ export default function IndexClientesScreen() {
   };
 
   const handleEliminarCliente = (id: string) => {
-    Alert.alert(
-      "Eliminar Cliente",
-      "¿Estás seguro de eliminar este cliente?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Eliminar",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await eliminarCliente(id);
-              setClientes(prev => prev.filter(c => c.id !== id));
-              Toast.show({
-                type: "success",
-                text1: "Cliente eliminado",
-                text2: "El cliente se eliminó correctamente",
-              });
-            } catch (error) {
-              Toast.show({
-                type: "error",
-                text1: "Error",
-                text2: "No se pudo eliminar el cliente",
-              });
-            }
-          },
+    Alert.alert("Eliminar Cliente", "¿Estás seguro de eliminar este cliente?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Eliminar",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await eliminarCliente(id);
+            setClientes((prev) => prev.filter((c) => c.id !== id));
+            Toast.show({
+              type: "success",
+              text1: "Cliente eliminado",
+              text2: "El cliente se eliminó correctamente",
+            });
+          } catch (error) {
+            Toast.show({
+              type: "error",
+              text1: "Error",
+              text2: "No se pudo eliminar el cliente",
+            });
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -112,7 +108,9 @@ export default function IndexClientesScreen() {
           )
         }
         renderItem={({ item }) => (
-          <SwipeableNotification onDelete={() => handleEliminarCliente(item.id)}>
+          <SwipeableNotification
+            onDelete={() => handleEliminarCliente(item.id)}
+          >
             <ClienteCard
               cliente={item}
               onPress={() => {
@@ -134,7 +132,6 @@ export default function IndexClientesScreen() {
       <NuevoClienteModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        
         onClienteCreado={() => {
           cargarClientes();
           Toast.show({

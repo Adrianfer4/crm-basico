@@ -3,7 +3,7 @@ import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { TextInput, Button, Text, Snackbar } from "react-native-paper";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/config/firebaseConfig";
 import { useRouter } from "expo-router";
 

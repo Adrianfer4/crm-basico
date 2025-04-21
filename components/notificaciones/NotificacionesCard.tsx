@@ -70,7 +70,10 @@ export default function NotificacionesCard({
             const isActive = estado === key;
 
             return (
-                <Animated.View key={key} style={{ transform: [{ scale: scales[key] }] }}>
+              <Animated.View
+                key={key}
+                style={{ transform: [{ scale: scales[key] }] }}
+              >
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPressIn={() => handlePressIn(key)}

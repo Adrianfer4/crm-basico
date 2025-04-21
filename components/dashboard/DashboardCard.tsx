@@ -8,7 +8,12 @@ type Props = {
   color?: string;
 };
 
-export default function DashboardCard({ title, value, icon, color = "#6200ee" }: Props) {
+export default function DashboardCard({
+  title,
+  value,
+  icon,
+  color = "#6200ee",
+}: Props) {
   return (
     <View style={[styles.card, { borderLeftColor: color }]}>
       <MaterialCommunityIcons name={icon} size={32} color={color} />
@@ -29,6 +34,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderLeftWidth: 4,
     gap: 12,
+    marginBottom: 14
   },
   title: {
     fontSize: 16,

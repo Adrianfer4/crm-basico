@@ -6,7 +6,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  QueryDocumentSnapshot 
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { Cliente } from "@/types/venta";
 
@@ -17,14 +17,16 @@ export const obtenerClientes = async (): Promise<Cliente[]> => {
 
   const snapshot = await getDocs(ref);
 
-  return snapshot.docs.map((doc: QueryDocumentSnapshot): Cliente => ({
-    id: doc.id,
-    nombre: doc.get("nombre") || "", 
-    email: doc.get("email") || "",
-    telefono: doc.get("telefono") || "",
-    nota: doc.get("nota") || "",
-    avatarUrl: doc.get("avatarUrl") || "",
-  }));
+  return snapshot.docs.map(
+    (doc: QueryDocumentSnapshot): Cliente => ({
+      id: doc.id,
+      nombre: doc.get("nombre") || "",
+      email: doc.get("email") || "",
+      telefono: doc.get("telefono") || "",
+      nota: doc.get("nota") || "",
+      avatarUrl: doc.get("avatarUrl") || "",
+    })
+  );
 };
 
 export const crearCliente = async (cliente: Cliente) => {

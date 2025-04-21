@@ -7,7 +7,7 @@ import {
   Modal,
 } from "react-native";
 import { useState, useEffect } from "react";
-import ModalSelectCliente from "./ModalSelectCliente";
+import ModalSelectCliente from "@/components/cliente/ModalSelectCliente";
 import { Cliente, Venta } from "@/types/venta";
 
 type Props = {
@@ -52,13 +52,13 @@ export default function ModalEditarVenta({
   const handleGuardar = () => {
     if (!descripcion || !total) return;
     onSubmit({
-      clienteId: clienteSeleccionado?.id || '',
+      clienteId: clienteSeleccionado?.id || "",
       descripcion,
       total: parseFloat(total),
       estado,
     });
   };
-  
+
   const obtenerNombreCliente = () => {
     const cliente = clientes.find((c) => c.id === clienteId);
     return cliente ? cliente.nombre : "Seleccionar cliente";

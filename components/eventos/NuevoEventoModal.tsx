@@ -8,14 +8,14 @@ import {
   Modal,
   ActivityIndicator,
 } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState, useEffect } from "react";
 import { crearEvento } from "@/firebase/eventos";
 import { obtenerClientes } from "@/firebase/clientes";
 import { Evento } from "@/types/evento";
 import { Cliente } from "@/types/venta";
 import { auth } from "@/config/firebaseConfig";
-import ModalSelectCliente from "./ModalSelectCliente"; 
+import ModalSelectCliente from "../cliente/ModalSelectCliente";
 
 type NuevoEventoModalProps = {
   visible: boolean;
@@ -54,7 +54,7 @@ export default function NuevoEventoModal({
 
   const handleGuardar = async () => {
     const user = auth.currentUser;
-    
+
     if (!user) {
       Alert.alert("Error", "Debes estar autenticado para crear eventos");
       return;
@@ -67,13 +67,16 @@ export default function NuevoEventoModal({
 
     setLoading(true);
     try {
-      const nuevoEvento = await crearEvento({
-        titulo,
-        descripcion,
-        fecha,
-        hora,
-        clienteId: clienteId || undefined,
-      }, { uid: user.uid });
+      const nuevoEvento = await crearEvento(
+        {
+          titulo,
+          descripcion,
+          fecha,
+          hora,
+          clienteId: clienteId || undefined,
+        },
+        { uid: user.uid }
+      );
 
       onEventoCreado(nuevoEvento);
       resetForm();
@@ -132,8 +135,8 @@ export default function NuevoEventoModal({
             multiline
           />
 
-          <TouchableOpacity 
-            style={styles.input} 
+          <TouchableOpacity
+            style={styles.input}
             onPress={() => setMostrarTimePicker(true)}
           >
             <Text style={{ color: hora ? "#fff" : "#777" }}>
@@ -168,15 +171,15 @@ export default function NuevoEventoModal({
           </TouchableOpacity>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity 
-              style={[styles.button, styles.cancelButton]} 
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
               onPress={onClose}
             >
               <Text style={styles.buttonText}>Cancelar</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={[styles.button, styles.saveButton]} 
+            <TouchableOpacity
+              style={[styles.button, styles.saveButton]}
               onPress={handleGuardar}
               disabled={loading}
             >

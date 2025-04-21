@@ -50,7 +50,7 @@ export default function EditarClienteModal({
 
   const handleGuardar = async () => {
     if (!cliente?.id) return;
-    
+
     if (!nombre.trim() || !email.trim() || !telefono.trim()) {
       Alert.alert("Error", "Nombre, email y teléfono son obligatorios");
       return;

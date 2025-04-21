@@ -7,7 +7,7 @@ import {
   Modal,
 } from "react-native";
 import { useState } from "react";
-import ModalSelectCliente from "./ModalSelectCliente";
+import ModalSelectCliente from "@/components/cliente/ModalSelectCliente";
 import { Cliente } from "@/types/venta";
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function ModalVentaForm({
+export default function CrearVentaModal({
   visible,
   clientes,
   clienteSeleccionado,

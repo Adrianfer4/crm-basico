@@ -12,8 +12,8 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState, useEffect } from "react";
 import { actualizarEvento, eliminarEvento } from "@/firebase/eventos";
-import { obtenerClientes} from "@/firebase/clientes";
-import ModalSelectCliente from "./ModalSelectCliente"; 
+import { obtenerClientes } from "@/firebase/clientes";
+import ModalSelectCliente from "@/components/cliente/ModalSelectCliente";
 import { Cliente } from "@/types/venta";
 
 type EditarEventoModalProps = {
@@ -180,9 +180,9 @@ export default function EditarEventoModal({
                 email: "",
                 telefono: "",
                 nota: "",
-                avatarUrl: ""
+                avatarUrl: "",
               } as Cliente,
-              ...clientes
+              ...clientes,
             ]}
             onSelect={handleSeleccionarCliente}
           />

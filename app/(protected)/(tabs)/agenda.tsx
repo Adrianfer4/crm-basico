@@ -6,13 +6,13 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import { Calendar, DateData  } from "react-native-calendars";
+import { Calendar, DateData } from "react-native-calendars";
 import { obtenerEventosPorFecha } from "@/firebase/eventos";
 import { Evento } from "@/types/evento";
-import NuevoEventoModal from "@/components/NuevoEventoModal";
-import EditarEventoModal from "@/components/EditarEventoModal";
+import NuevoEventoModal from "@/components/eventos/NuevoEventoModal";
+import EditarEventoModal from "@/components/eventos/EditarEventoModal";
 import { FAB } from "react-native-paper";
 import Toast from "react-native-toast-message";
 
@@ -23,7 +23,9 @@ export default function AgendaScreen() {
   );
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [loading, setLoading] = useState(false);
-  const [eventoSeleccionado, setEventoSeleccionado] = useState<Evento | null>(null);
+  const [eventoSeleccionado, setEventoSeleccionado] = useState<Evento | null>(
+    null
+  );
 
   const obtenerEventos = useCallback(async () => {
     setLoading(true);
@@ -46,7 +48,7 @@ export default function AgendaScreen() {
   }, [obtenerEventos]);
 
   const handleEventoCreado = (evento: Evento) => {
-    setEventos(prev => [...prev, evento]);
+    setEventos((prev) => [...prev, evento]);
     setMostrarModal(false);
     Toast.show({
       type: "success",
@@ -78,7 +80,7 @@ export default function AgendaScreen() {
       <Text style={styles.title}>Agenda</Text>
 
       <Calendar
-        onDayPress={(day: DateData) => setFechaSeleccionada(day.dateString)} 
+        onDayPress={(day: DateData) => setFechaSeleccionada(day.dateString)}
         markedDates={{
           [fechaSeleccionada]: {
             selected: true,
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     marginVertical: 16,
-    textAlign: "center"
+    textAlign: "center",
   },
   listContainer: {
     flexGrow: 1,

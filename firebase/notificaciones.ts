@@ -1,4 +1,15 @@
-import { collection, addDoc, getDocs, query, where, doc, updateDoc, orderBy, deleteDoc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+  orderBy,
+  deleteDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { Notificacion } from "@/types/notificacion";
 
@@ -14,25 +25,30 @@ export async function crearNotificacion(data: Omit<Notificacion, "id">) {
 }
 
 export const obtenerNotificacionesPorUsuario = async (userId: string) => {
-    try {
-      const notificacionesRef = collection(db, "notificaciones");
-      const q = query(notificacionesRef, where("userId", "==", userId),
-      orderBy("createdAt", "desc"));
+  try {
+    const notificacionesRef = collection(db, "notificaciones");
+    const q = query(
+      notificacionesRef,
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
 
-      const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(q);
 
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Notificacion[];
-      
-    } catch (error) {
-      console.error("Error en obtenerNotificacionesPorCliente:", error);
-      throw new Error("Error al obtener las notificaciones");
-    }
-  };
+    return querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Notificacion[];
+  } catch (error) {
+    console.error("Error en obtenerNotificacionesPorCliente:", error);
+    throw new Error("Error al obtener las notificaciones");
+  }
+};
 
-export async function actualizarEstadoNotificacion(id: string, estado: 'pendiente' | 'completado' | 'cancelado') {
+export async function actualizarEstadoNotificacion(
+  id: string,
+  estado: "pendiente" | "completado" | "cancelado"
+) {
   try {
     const notificacionRef = doc(db, "notificaciones", id);
     await updateDoc(notificacionRef, { estado });
@@ -47,7 +63,7 @@ export async function eliminarNotificacion(idEvento: string) {
     const notificacionesRef = collection(db, "notificaciones");
     const q = query(notificacionesRef, where("idEvento", "==", idEvento));
     const snapshot = await getDocs(q);
-    
+
     snapshot.forEach(async (doc) => {
       await deleteDoc(doc.ref);
     });
@@ -56,7 +72,6 @@ export async function eliminarNotificacion(idEvento: string) {
   }
 }
 
-// firebase/notificaciones.ts
 export const onNotificacionesSnapshot = (
   userId: string,
   callback: (notificaciones: Notificacion[]) => void,
@@ -68,12 +83,16 @@ export const onNotificacionesSnapshot = (
     orderBy("createdAt", "desc")
   );
 
-  return onSnapshot(q, //onSnapshop no existe
+  return onSnapshot(
+    q,
     (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }) as Notificacion);
+      const data = snapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          } as Notificacion)
+      );
       callback(data);
     },
     (error) => errorCallback(error)

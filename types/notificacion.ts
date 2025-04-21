@@ -6,7 +6,7 @@ export type Notificacion = {
   fecha: string;
   hora: string;
   userId: string;
-  estado: 'pendiente' | 'completado' | 'cancelado';
+  estado: "pendiente" | "completado" | "cancelado";
   createdAt: string;
   prev: string;
   notificationId: string;

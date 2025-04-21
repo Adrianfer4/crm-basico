@@ -94,7 +94,7 @@ export default function LoginScreen() {
         onDismiss={() => setVisible(false)}
         duration={800}
         style={styles.snackbar}
-        theme={{ colors: { surface: "#4caf50", accent: "#fff" }}}
+        theme={{ colors: { surface: "#4caf50", accent: "#fff" } }}
       >
         <Text style={styles.snackbarText}>Login exitoso</Text>
       </Snackbar>
@@ -106,19 +106,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#121212",
     padding: 20,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 30,
-    textAlign: "center"
+    textAlign: "center",
   },
   input: {
     backgroundColor: "#1f1f1f",
     marginBottom: 15,
-    borderRadius: 8
+    borderRadius: 8,
   },
   button: {
     marginTop: 10,
@@ -127,26 +127,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#4caf50",
   },
   buttonLabel: {
-    color:"#fff",
+    color: "#fff",
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   linkButton: {
-    marginTop: 15
+    marginTop: 15,
   },
   linkBabel: {
-    color: "#4caf50"
+    color: "#4caf50",
   },
   errorText: {
     color: "#ff4444",
     marginBottom: 10,
-    textAlign: "center"
+    textAlign: "center",
   },
   snackbar: {
     backgroundColor: "#ff9800",
   },
   snackbarText: {
     color: "#fff",
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });

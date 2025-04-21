@@ -6,22 +6,25 @@ import {
   FlatList,
   ActivityIndicator,
   LayoutAnimation,
-  Platform, 
-  UIManager 
+  Platform,
+  UIManager,
 } from "react-native";
 import {
   obtenerNotificacionesPorUsuario,
-  actualizarEstadoNotificacion, 
-  onNotificacionesSnapshot
+  actualizarEstadoNotificacion,
+  onNotificacionesSnapshot,
 } from "@/firebase/notificaciones";
 import { useAuth } from "@/context/AuthContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import NotificacionesCard from "@/components/NotificacionesCard";
-import SwipeableNotification from '@/components/SwipeableNotification';
-import { eliminarNotificacion } from '@/firebase/notificaciones';
+import NotificacionesCard from "@/components/notificaciones/NotificacionesCard";
+import SwipeableNotification from "@/components/notificaciones/SwipeableNotification";
+import { eliminarNotificacion } from "@/firebase/notificaciones";
 import { Notificacion } from "@/types/notificacion";
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -32,59 +35,68 @@ export default function NotificacionesScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchNotificaciones = useCallback(async (isRefreshing = false) => {
-    try {
-      if (isRefreshing) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
+  const fetchNotificaciones = useCallback(
+    async (isRefreshing = false) => {
+      try {
+        if (isRefreshing) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
+
+        setError("");
+
+        if (!user?.uid) throw new Error("Usuario no autenticado");
+
+        const data = await obtenerNotificacionesPorUsuario(user.uid);
+
+        setNotificaciones(data?.filter(Boolean) || []);
+      } catch (err: any) {
+        setError(err.message || "Error cargando notificaciones");
+      } finally {
+        if (isRefreshing) {
+          setRefreshing(false);
+        } else {
+          setLoading(false);
+        }
       }
-  
-      setError("");
-  
-      if (!user?.uid) throw new Error("Usuario no autenticado");
-  
-      const data = await obtenerNotificacionesPorUsuario(user.uid);
-  
-      setNotificaciones(data?.filter(Boolean) || []);
-    } catch (err: any) {
-      setError(err.message || "Error cargando notificaciones");
-    } finally {
-      if (isRefreshing) {
-        setRefreshing(false);
-      } else {
-        setLoading(false);
-      }
-    }
-  }, [user?.uid]);
+    },
+    [user?.uid]
+  );
 
   useEffect(() => {
     if (!user?.uid) return;
-    
-    const unsubscribe = onNotificacionesSnapshot(user.uid, (nuevasNotificaciones) => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setNotificaciones(nuevasNotificaciones);
-      setLoading(false);
-    }, (error) => {
-      setError(error.message);
-      setLoading(false);
-    });
+
+    const unsubscribe = onNotificacionesSnapshot(
+      user.uid,
+      (nuevasNotificaciones) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setNotificaciones(nuevasNotificaciones);
+        setLoading(false);
+      },
+      (error) => {
+        setError(error.message);
+        setLoading(false);
+      }
+    );
 
     return () => unsubscribe();
   }, [user?.uid]);
 
-  const handleCambiarEstado = async (id: string, nuevoEstado: "pendiente" | "completado" | "cancelado") => {
+  const handleCambiarEstado = async (
+    id: string,
+    nuevoEstado: "pendiente" | "completado" | "cancelado"
+  ) => {
     try {
       if (!id) throw new Error("ID de notificación inválido");
       await actualizarEstadoNotificacion(id, nuevoEstado as any);
 
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setNotificaciones((prev: Notificacion[]) => 
+      setNotificaciones((prev: Notificacion[]) =>
         prev.map((item) =>
           item.id === id ? { ...item, estado: nuevoEstado } : item
         )
       );
-
     } catch {
       setError("Error actualizando estado");
     }
@@ -94,15 +106,14 @@ export default function NotificacionesScreen() {
     try {
       await eliminarNotificacion(id);
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      setNotificaciones(prev => prev.filter(item => item.id !== id));
+      setNotificaciones((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
       setError("Error eliminando notificación");
     }
   };
 
-  // Filtrar notificaciones del día actual
-  const filteredNotificaciones = notificaciones.filter(item => {
-    const today = new Date().toISOString().split('T')[0];
+  const filteredNotificaciones = notificaciones.filter((item) => {
+    const today = new Date().toISOString().split("T")[0];
     return item.fecha === today;
   });
 
@@ -133,7 +144,9 @@ export default function NotificacionesScreen() {
           if (!item) return null;
 
           return (
-            <SwipeableNotification onDelete={() => item.id && handleEliminarNotificacion(item.id)}>
+            <SwipeableNotification
+              onDelete={() => item.id && handleEliminarNotificacion(item.id)}
+            >
               <NotificacionesCard
                 titulo={item.titulo || "Sin título"}
                 fechaHora={

@@ -1,11 +1,17 @@
-// context/AuthContext.tsx
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { 
-  User, 
-  onAuthStateChanged, 
-  signInWithEmailAndPassword, 
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  ReactNode,
+} from "react";
+import {
+  User,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
   signOut,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "@/config/firebaseConfig";
 import { useRouter } from "expo-router";
@@ -29,6 +35,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const listeners = useRef<(() => void)[]>([]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -46,9 +54,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       "auth/wrong-password": "Contraseña incorrecta",
       "auth/email-already-in-use": "El correo ya está registrado",
       "auth/weak-password": "La contraseña debe tener al menos 6 caracteres",
-      "auth/too-many-requests": "Demasiados intentos, intente más tarde"
+      "auth/too-many-requests": "Demasiados intentos, intente más tarde",
     };
-    
+
     return errors[errorCode as keyof typeof errors] || "Error de autenticación";
   };
 
@@ -78,7 +86,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
+      listeners.current.forEach(unsubscribe => unsubscribe());
+      listeners.current = [];
+
+      setUser(null);
+      setError(null);
+
       await signOut(auth);
+      
       router.replace("/login");
     } catch (error: any) {
       setError("Error al cerrar sesión");
@@ -86,7 +101,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, error }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, logout, error }}
+    >
       {children}
     </AuthContext.Provider>
   );

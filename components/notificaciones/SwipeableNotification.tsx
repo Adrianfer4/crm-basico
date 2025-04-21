@@ -1,8 +1,8 @@
-import React from 'react';
-import { RectButton } from 'react-native-gesture-handler';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from "react";
+import { RectButton } from "react-native-gesture-handler";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import { StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const SwipeableNotification = ({ children, onDelete }: any) => {
   const renderRightActions = () => (
@@ -24,9 +24,9 @@ const SwipeableNotification = ({ children, onDelete }: any) => {
 
 const styles = StyleSheet.create({
   deleteButton: {
-    backgroundColor: '#ff4444',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#ff4444",
+    justifyContent: "center",
+    alignItems: "center",
     width: 70,
     marginVertical: 8,
     borderRadius: 8,
