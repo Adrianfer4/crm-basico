@@ -30,33 +30,6 @@
 
 ---
 
-## 🗺️ Estructura del proyecto
-
-/
-├── app/ # Rutas con Expo Router
-│ ├── (auth)/ # login, register
-│ └── (protected)/ # área privada
-│ ├── (tabs)/ # navegación con pestañas
-│ │ ├── index.tsx # dashboard
-│ │ ├── ventas.tsx
-│ │ ├── agenda.tsx
-│ │ ├── notificaciones.tsx
-│ │ └── perfil.tsx
-│ └── clientes/ # módulo clientes
-│ └── index.tsx
-├── components/ # Cards, formularios, modals reutilizables
-├── context/ # Auth context
-├── firebase/ # Lógica Firestore y notificaciones
-├── types/ # Interfaces TS: Cliente, Evento, Venta
-├── config/firebaseConfig.ts # Configuración Firebase
-└── package.json
-
-yaml
-Copiar
-Editar
-
----
-
 ## 🔐 Reglas de seguridad (Firestore)
 
 ```js
@@ -75,16 +48,10 @@ service cloud.firestore {
 ⚙️ Instalación y puesta en marcha
 Clonar repo:
 
-bash
-Copiar
-Editar
 git clone https://github.com/Adrianfer4/crm-basico.git
 cd crm-basico
 Instalar dependencias:
 
-bash
-Copiar
-Editar
 npm install
 # o
 yarn install
@@ -98,9 +65,6 @@ Coloca tu configuración en config/firebaseConfig.ts.
 
 Ejecutar app:
 
-bash
-Copiar
-Editar
 npx expo start
 🧪 Integraciones personalizadas
 Eventos: CRUD y programación de notificaciones (expo-notifications + Firestore).
@@ -113,10 +77,6 @@ Routing: navegación tipo stack & tabs con historial propio y botón atrás nati
 
 🧩 Próximos pasos / mejoras
 Implementar lógica real de ventas del día en el dashboard (obtenerVentasHoy)
-
-Agregar búsqueda/filtros dentro de eventos y ventas
-
-Permitir edición/borrado de clientes
 
 Mostrar historial de notificaciones
 
